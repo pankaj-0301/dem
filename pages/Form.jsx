@@ -60,22 +60,29 @@ const Form = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      // If validation is successful, you can submit the form data
-      console.log('Form data submitted:', formData);
-
-      // Add your logic to send the data to the server or Google Sheets
-      // Example: Use fetch or axios to send the data to your server
       try {
-        const response = await fetch('/api/submitForm', {
+        // Use the nocodeapi endpoint to submit form data to Google Sheets
+        const response = await fetch('https://v1.nocodeapi.com/coders2211/google_sheets/GGEKFzHkVavJmCmr?tabId=Contact', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify([[
+            formData.fullName,
+            formData.email,
+            formData.phone,
+            formData.message,
+          ]]),
         });
 
         if (response.ok) {
           console.log('Form data sent successfully.');
+          setFormData({
+            fullName: '',
+            email: '',
+            phone: '',
+            message: '',
+          });
         } else {
           console.error('Error sending form data.');
         }
@@ -86,6 +93,8 @@ const Form = () => {
       console.log('Form validation failed. Please check the errors.');
     }
   };
+
+ 
 
   return (
     <Fragment>
@@ -160,6 +169,8 @@ const Form = () => {
       </div>
     </Fragment>
   );
+
 }
 
-export default Form;
+
+export default Form
